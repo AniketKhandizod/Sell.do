@@ -3,13 +3,13 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.selldo.UserManagment.UserManagment">
+      <class name="ClientCreation.Push_Pull_Lead_Test">
         <methods>
           <include name="browserConfig"/>
-          <include name="manageUser"/>
+          <include name="pushLeadFromPreSales"/>
           <include name="terminate"/>
         </methods>
-      </class> <!-- com.selldo.UserManagment.UserManagment -->
+      </class> <!-- ClientCreation.Push_Pull_Lead_Test -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
