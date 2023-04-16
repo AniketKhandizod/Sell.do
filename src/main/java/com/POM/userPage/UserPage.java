@@ -1,4 +1,4 @@
-package selldo.POM;
+package com.POM.userPage;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

@@ -46,7 +46,7 @@ public class BaseTest {
 			driver.manage().window().maximize();
 			driver.manage().deleteAllCookies();
 			driver.get(prop.getProperty("url"));
-			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10000));
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2000));
 		}
 		loginPage A =new loginPage(driver);
 		 client= A.login();

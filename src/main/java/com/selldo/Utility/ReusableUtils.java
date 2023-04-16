@@ -8,6 +8,7 @@ import java.time.Duration;
 import java.util.Properties;
 
 import org.apache.commons.lang.RandomStringUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -17,7 +18,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public  class ReusableUtils {
+public class ReusableUtils {
 
 	WebDriver driver;
 
@@ -34,17 +35,19 @@ public  class ReusableUtils {
 		}
 		return prop;
 	}
+
 // --------------------------Wait ------------------------
 	protected WebElement waitUntilVisiblity(WebElement we) {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		wait.until(ExpectedConditions.visibilityOf(we));
 		return we;
 	}
 
 	protected void waitElementToBeClickable(WebElement we) {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(we)));
 	}
+
 	protected void wait(int value) {
 		try {
 			Thread.sleep(value);
@@ -63,14 +66,24 @@ public  class ReusableUtils {
 		Actions actions = new Actions(driver);
 		actions.moveToElement(we).build().perform();
 	}
+
 	protected void moveToElementClick(WebElement we) {
 		Actions actions = new Actions(driver);
 		actions.moveToElement(we).click().build().perform();
 	}
+
 	protected void moveToAndEnter(WebElement we) {
 		Actions actions = new Actions(driver);
 		actions.moveToElement(we);
 		actions.click();
+		actions.sendKeys(Keys.ENTER);
+		actions.build().perform();
+	}
+	protected void moveToAndEnter(WebElement we,String value) {
+		Actions actions = new Actions(driver);
+		actions.moveToElement(we);
+		actions.click();
+		actions.sendKeys(value);
 		actions.sendKeys(Keys.ENTER);
 		actions.build().perform();
 	}
@@ -83,6 +96,7 @@ public  class ReusableUtils {
 		actions.sendKeys(Keys.ENTER);
 		actions.build().perform();
 	}
+
 	protected void moveToAndSendKey(WebElement we, String s) {
 		Actions actions = new Actions(driver);
 		actions.moveToElement(we);
@@ -98,6 +112,23 @@ public  class ReusableUtils {
 		actions.sendKeys(Keys.ENTER);
 		actions.build().perform();
 	}
+
+	protected void move2click(WebElement we, WebElement we2) {
+		Actions actions = new Actions(driver);
+		actions.moveToElement(we);
+		actions.moveToElement(we2);
+		actions.click();
+		actions.build().perform();
+	}
+	protected void move2click(WebElement we,int value) {
+		Actions actions = new Actions(driver);
+		actions.moveToElement(we);
+		actions.build().perform();
+		
+		 driver.findElement(By.cssSelector(
+		 "body > div.main-nav-container > div.sub-navigation-bar > div:nth-child(1) > div:nth-child(" + value+ ") > a")).click();
+	}
+
 //-------------------JavascriptExecutor---------------- 
 	protected void scrollIntoView(WebElement we) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -118,6 +149,7 @@ public  class ReusableUtils {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
 	}
+
 // ----------------Select ------------------
 	protected void selectByIndex(WebElement we, int index) {
 		Select oSelect = new Select(we);
@@ -150,34 +182,39 @@ public  class ReusableUtils {
 		}
 
 		try {
-			FileWriter writer = new FileWriter(System.getProperty("user.dir") + "/Random Values/"+method+" value"+".txt");
+			FileWriter writer = new FileWriter(
+					System.getProperty("user.dir") + "/Random Values/" + method + " value" + ".txt");
 			BufferedWriter buffer = new BufferedWriter(writer);
 			buffer.write("for : " + method + " : " + Return);
 			buffer.close();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		return Return;
 
 	}
+
 	// -----------------------Switching frame-------------------
 	protected void frameSwitch(int value) {
 		driver.switchTo().frame(value);
 	}
+
 	protected void frameSwitch(String value) {
 		driver.switchTo().frame(value);
 	}
+
 	protected void frameSwitch(WebElement value) {
 		driver.switchTo().frame(value);
 	}
+
 	protected void defaultContentSwitch() {
 		driver.switchTo().defaultContent();
 	}
+
 //--------------Other------------------------------------------------
 	protected void refresh() {
 		driver.navigate().refresh();
 	}
-	
+
 }
