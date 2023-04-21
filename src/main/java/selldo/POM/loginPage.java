@@ -27,9 +27,11 @@ public class loginPage extends ReusableUtils {
 	private WebElement signIn;
 	
 	public LoginAsClient login(){
-		
+		Square(userName);
 		userName.sendKeys(getGobalData().getProperty("id"));
+		Square(password);
 		password.sendKeys(getGobalData().getProperty("pswd"));
+		Square(signIn);
 		jsClick(signIn);
 		return new LoginAsClient(driver);
 	}

@@ -1,24 +1,26 @@
 package com.selldo.Utility;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.RandomStringUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
-
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.reporter.ExtentSparkReporter;
-import com.aventstack.extentreports.reporter.configuration.Theme;
+import org.testng.annotations.BeforeSuite;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import selldo.POM.LoginAsClient;
@@ -27,17 +29,38 @@ import selldo.POM.loginPage;
 public class BaseTest {
 	public WebDriver driver;
 	public Properties prop;
-	public ExtentReports extent; 
-	public  ExtentTest test;
 	public LoginAsClient client;
-	
+	public FileWriter writer;
+	public BufferedWriter buffer;
+
+	@BeforeSuite(alwaysRun = true)
+	public void ObjectInvokder() throws IOException {
+		writer = new FileWriter(System.getProperty("user.dir") + "/Random Values/value.txt", true);
+		buffer = new BufferedWriter(writer);
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");//yyyy/MM/dd
+		LocalDateTime now = LocalDateTime.now();
+		buffer.newLine();
+		buffer.write("===========================================================");
+		buffer.newLine();
+		buffer.write("------------------"+dtf.format(now)+"----------------------");
+		buffer.newLine();
+		buffer.write("⇓ ⇟ ⇩ ⇓ ⇟ ⇩ ⇓ ⇟ ⇩ ⇓ ⇟ ⇩ ⇓ ⇟ ⇩ ⇓ ⇟ ⇩ ⇓ ⇟ ⇩ ⇓ ⇟ ⇩ ⇓ ⇟ ⇩ ⇓ ⇟ ⇩ ");
+		buffer.newLine();
+	}
+
+	@AfterSuite(alwaysRun = true)
+	public void ObjectSupressor() throws IOException {
+		buffer.close();
+	}
 
 	@BeforeMethod(alwaysRun = true)
 	public void browserConfig() throws FileNotFoundException, IOException {
-		
-		getReportObject();
+
+		// -------------------Property Files-------------------//
 		prop = new Properties();
 		prop.load(new FileInputStream(System.getProperty("user.dir") + "/config.properties"));
+
+		// -------------------WebDriver-------------------//
 		WebDriverManager.chromedriver().setup();
 
 		if (prop.getProperty("browser").equals("chrome")) {
@@ -46,16 +69,15 @@ public class BaseTest {
 			driver.manage().window().maximize();
 			driver.manage().deleteAllCookies();
 			driver.get(prop.getProperty("url"));
-			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2000));
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
 		}
-		loginPage A =new loginPage(driver);
-		 client= A.login();
-		
-		 
+		loginPage A = new loginPage(driver);
+		client = A.login();
+
 	}
 
 	@AfterMethod(alwaysRun = true)
-	public void terminate() {
+	public void terminate() throws InterruptedException {
 		driver.quit();
 	}
 
@@ -67,35 +89,31 @@ public class BaseTest {
 		return System.getProperty("user.dir") + "//reports//" + fileName + ".png";
 	}
 
-	public  ExtentReports getReportObject() {
-
-		Properties prop = new Properties();
-		try {
-			prop.load(new FileInputStream(System.getProperty("user.dir") + "/config.properties"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	protected String random(String method, String choise, int size) {
+		String Return = "";
+		switch (choise) {
+		case "AN":
+			Return = RandomStringUtils.randomAlphanumeric(size);
+			break;// pX4Mv3KsJU
+		case "A":
+			Return = RandomStringUtils.randomAlphabetic(size);
+			break;// ZLTRqGyuXk
+		case "R":
+			Return = RandomStringUtils.random(size);
+			break;// 嚰险걻鯨贚䵧縓
+		case "N":
+			Return = RandomStringUtils.randomNumeric(size);
+			break;// 3511779161
+		default:
+			break;
 		}
 
-		// -----------------------------------------------------------------------------
-		String path = System.getProperty("user.dir") + "//reports//index.html";
-		ExtentSparkReporter reporter = new ExtentSparkReporter(path);
-		reporter.config().setReportName("Web Automation Results");
-		reporter.config().setDocumentTitle("Test Results");
-		// reporter.config().setChartVisibilityOnOpen(true);
-		// reporter.config().setTestViewChartLocation(ChartLocation.TOP);
-		reporter.config().setTheme(Theme.STANDARD);
-
-		ExtentReports extent = new ExtentReports();
-		extent.attachReporter(reporter);
-		extent.setSystemInfo("Tester", "Aniket");
-		extent.setSystemInfo("OS", "Linux");
-		extent.setSystemInfo("Host Name", "selldoTest-ThinkCentre-A85");
-		extent.setSystemInfo("Environment", prop.getProperty("url"));
-		extent.setSystemInfo("User Name", "amura");
-		return extent;
+		try {
+			buffer.write("for : " + method + " : " + Return);
+			buffer.newLine();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Return;
 	}
-
-
-	
 }

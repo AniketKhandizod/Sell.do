@@ -67,64 +67,79 @@ public class LoginAsClient extends ReusableUtils {
 	private WebElement clickOnCreateInvoice;
 
 	public void selectClient() {
-
+		Square(SelectAClientField);
 		SelectAClientField.click();
 		SelectAClientFieldInput.sendKeys(getGobalData().getProperty("client"));
+		Square(ClientName);
 		ClientName.click();
+		Square(SearchButton);
 		SearchButton.click();
 
 	}
 
 	public void loginAsClient() {
+		Square(loginAsClient);
 		loginAsClient.click();
 	}
 
 	public void clickOnUsers() {
+		Square(clickOnUsers);
 		clickOnUsers.click();
 	}
 
 	public void clickOnMarketingVendors() {
+		Square(clickOnMarketingVendors);
 		clickOnMarketingVendors.click();
 	}
 
 	public void clickOnMonotor() {
+		Square(clickOnMonotor);
 		clickOnMonotor.click();
 	}
 
 	public void clickOnCallDelayState() {
+		Square(clickOnCallDelayState);
 		clickOnCallDelayState.click();
 	}
 
 	public void clickOnSupportpermsiison() {
+		Square(clickOnSupportpermsiison);
 		clickOnSupportpermsiison.click();
 	}
 
 	public void clickOnUploadAndroLINK_TEXTAPK() {
+		Square(clickOnUploadAndroLINK_TEXTAPK);
 		clickOnUploadAndroLINK_TEXTAPK.click();
 	}
 
 	public void clickOnInvices() {
+		Square(clickOnInvices);
 		clickOnInvices.click();
 	}
 
 	public void clickOnInvoiceAgencyTracking() {
+		Square(clickOnInvoiceAgencyTracking);
 		clickOnInvoiceAgencyTracking.click();
 	}
 
 	public void clickOnTelephony() {
+		Square(clickOnTelephony);
 		clickOnTelephony.click();
 	}
 
 	public void updateDefaultPlan() {
+		Square(updateDefaultPlan);
 		updateDefaultPlan.click();
 	}
 
 	public void logout() {
+		Square(logout);
 		logout.click();
 	}
 
 	public AdminHomePage clickOnSelectedClient() {
-		jsClick(clickOnSelectedClient); //.click();
+		Square(clickOnSelectedClient);
+		jsClick(clickOnSelectedClient); // .click();
 		return new AdminHomePage(driver);
 	}
 
@@ -133,13 +148,17 @@ public class LoginAsClient extends ReusableUtils {
 	}
 
 	public void editPlan() {
+		Square(clickOnHamburger);
 		jsClick(clickOnHamburger);
+		Square(clickOnEditPlan);
 		jsClick(clickOnEditPlan);
 
 	}
 
 	public void clickOnCreateInvoice() {
+		Square(clickOnHamburger);
 		jsClick(clickOnHamburger);
+		Square(clickOnCreateInvoice);
 		jsClick(clickOnCreateInvoice);
 	}
 }

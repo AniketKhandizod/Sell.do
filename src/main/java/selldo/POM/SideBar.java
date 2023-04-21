@@ -167,8 +167,8 @@ public class SideBar extends ReusableUtils {
 		dashBord.click();
 	}
 
-	public void clicknewLead() {
-		
+	public void clicknewLead(int value) {
+
 //		System.out.println("kasfhb");
 //		moveToElement(leadManagement);
 //		System.out.println("kasfhb");
@@ -176,14 +176,11 @@ public class SideBar extends ReusableUtils {
 //		newLead.click();;
 //		System.out.println("kasfhb");
 
-		move2click(leadManagement,4);
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	
+		move2click(leadManagement, 3);
+//		driver.findElement(By.cssSelector(
+//				"body > div.main-nav-container > div.sub-navigation-bar > div:nth-child(1) > div:nth-child(" + value
+//						+ ") > a"))
+//				.click();
 	}
 
 	public void clickallLead() {

@@ -27,13 +27,11 @@ public class ExtentReporterNG  {
 		//-----------------------------------------------------------------------------
 		String path =System.getProperty("user.dir")+"//reports//index.html";
 		ExtentSparkReporter reporter = new ExtentSparkReporter(path);
-		reporter.config().setReportName("Web Automation Results");
+		reporter.config().setReportName("Sell.do CRM");
 		reporter.config().setDocumentTitle("Test Results");
-	  //reporter.config().setChartVisibilityOnOpen(true);
-	//	reporter.config().setTestViewChartLocation(ChartLocation.TOP);
-		reporter.config().setTheme(Theme.STANDARD);
+		reporter.config().setTheme(Theme.DARK);		
 		
-		ExtentReports extent =new ExtentReports();
+		ExtentReports extent = new ExtentReports();
 		extent.attachReporter(reporter);
 		extent.setSystemInfo("Tester", "Aniket");
 		extent.setSystemInfo("OS", "Linux");

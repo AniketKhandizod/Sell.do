@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.lang.RandomStringUtils;
@@ -20,7 +21,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ReusableUtils {
 
-	WebDriver driver;
+	private WebDriver driver;
+	private FileWriter writer;
+	private BufferedWriter buffer;
 
 	protected ReusableUtils(WebDriver driver) {
 		this.driver = driver;
@@ -42,7 +45,16 @@ public class ReusableUtils {
 		wait.until(ExpectedConditions.visibilityOf(we));
 		return we;
 	}
-
+	protected WebElement waitUntilInvisibility(WebElement we) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+		wait.until(ExpectedConditions.invisibilityOf(we));
+		return we;
+	}
+	protected List<WebElement> waitUntilVisibilityOfElements(List<WebElement> we) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+		wait.until(ExpectedConditions.visibilityOfAllElements(we));
+		return we;
+	}
 	protected void waitElementToBeClickable(WebElement we) {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(we)));
@@ -79,13 +91,12 @@ public class ReusableUtils {
 		actions.sendKeys(Keys.ENTER);
 		actions.build().perform();
 	}
-	protected void moveToAndEnter(WebElement we,String value) {
+
+	protected void moveToAndEnter(WebElement we, String value) {
 		Actions actions = new Actions(driver);
-		actions.moveToElement(we);
-		actions.click();
-		actions.sendKeys(value);
-		actions.sendKeys(Keys.ENTER);
-		actions.build().perform();
+		actions.moveToElement(we).click().sendKeys(value).sendKeys(Keys.ENTER).build().perform();
+		;
+
 	}
 
 	protected void moveToAndSendKeyEnter(WebElement we, String s) {
@@ -105,6 +116,13 @@ public class ReusableUtils {
 		actions.build().perform();
 	}
 
+	protected void scrollAction(WebElement we, WebElement we2) {
+		Actions actions = new Actions(driver);
+		actions.moveToElement(we);
+		actions.scrollToElement(we2);
+		actions.build().perform();
+	}
+
 	protected void moveToAndSendEnter(WebElement we) {
 		Actions actions = new Actions(driver);
 		actions.moveToElement(we);
@@ -120,13 +138,16 @@ public class ReusableUtils {
 		actions.click();
 		actions.build().perform();
 	}
-	protected void move2click(WebElement we,int value) {
+
+	protected void move2click(WebElement we, int value) {
 		Actions actions = new Actions(driver);
 		actions.moveToElement(we);
 		actions.build().perform();
-		
-		 driver.findElement(By.cssSelector(
-		 "body > div.main-nav-container > div.sub-navigation-bar > div:nth-child(1) > div:nth-child(" + value+ ") > a")).click();
+
+		driver.findElement(By.cssSelector(
+				"body > div.main-nav-container > div.sub-navigation-bar > div:nth-child(1) > div:nth-child(" + value
+						+ ") > a"))
+				.click();
 	}
 
 //-------------------JavascriptExecutor---------------- 
@@ -148,6 +169,10 @@ public class ReusableUtils {
 	protected void scrollHeight() {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+	}
+	protected  void Square(WebElement we) {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].style.border='3px solid #C7FF33'", we);
 	}
 
 // ----------------Select ------------------
@@ -182,9 +207,8 @@ public class ReusableUtils {
 		}
 
 		try {
-			FileWriter writer = new FileWriter(
-					System.getProperty("user.dir") + "/Random Values/" + method + " value" + ".txt");
-			BufferedWriter buffer = new BufferedWriter(writer);
+			writer = new FileWriter(System.getProperty("user.dir") + "/Random Values/" + method + " value" + ".txt");
+			buffer = new BufferedWriter(writer);
 			buffer.write("for : " + method + " : " + Return);
 			buffer.close();
 		} catch (Exception e) {
