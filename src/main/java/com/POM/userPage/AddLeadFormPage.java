@@ -34,13 +34,13 @@ public class AddLeadFormPage extends ReusableUtils{
 	private WebElement PrimaryEmail;
 	@FindBy(how = How.NAME, using = "primary_phone_ph_number")
 	private WebElement PrimaryPhone;
-	@FindBy(how = How.XPATH, using = "//*[@id='s2id_autogen57']/ul")
+	@FindBy(how = How.ID, using = "s2id_autogen49")//label[text()='Schedule and conduct site visit for project']
 	private WebElement ScheduleAndConductSiteVisitForProjectField;
 	@FindBy(how = How.XPATH, using = "//div[@id='s2id_autogen64']")
 	private WebElement NewLeadCreationLeadStage;
 	@FindBy(how = How.XPATH, using = "//body/div[@id='select2-drop']/ul[1]")
 	private List<WebElement> NewLeadStage;
-	@FindBy(how = How.CSS, using = "div.select2-drop.select2-drop-multi.select2-display-none.select2-drop-active ul li")
+	@FindBy(how = How.CSS, using = "#select2-drop li")
 	private List<WebElement> Project_dd;
 	@FindBy(how = How.XPATH, using = ".//*[@id='basic_info']/div/div[1]/div[1]/div[1]/")
 	private WebElement Salutation;
@@ -52,7 +52,7 @@ public class AddLeadFormPage extends ReusableUtils{
 	private WebElement addAnotherLink_pp;
 	@FindBy(how = How.XPATH, using = "//label[text()='Secondary Phone']/following::a[1]")
 	private WebElement removeAnotherLink_sp;
-	@FindBy(how = How.XPATH, using = "//*[@id='s2id_autogen61']/a/span[1]")
+	@FindBy(how = How.XPATH, using = "//span[text()='Select Team']")
 	private WebElement TeamsField;
 	@FindBy(how = How.XPATH, using = "//*[@id='select2-drop']/div/input")
 	private WebElement SelectTeamInputField;
@@ -70,7 +70,7 @@ public class AddLeadFormPage extends ReusableUtils{
 	private WebElement SourceFrom_dd;
 	@FindBy(how = How.XPATH, using = "//label[text()='Campaign']/following::span[text()='Walkin']")
 	private WebElement CampaignDropdown;
-	@FindBy(how = How.CSS, using = "#select2-drop ul li")
+	@FindBy(how = How.XPATH, using = "//li[contains(@class,'select2-re')]")
 	private List<WebElement> Campaign_dd;
 	@FindBy(how = How.XPATH, using = "//span[text()='Lead Stage']")
 	private WebElement LeadStageField;
@@ -110,8 +110,8 @@ public class AddLeadFormPage extends ReusableUtils{
 	private WebElement MaxPossession_dd;
 	@FindBy(how = How.XPATH, using = "//label[text()='Property types']/following::input[1]")
 	private WebElement PropertyTypes;
-	@FindBy(how = How.XPATH, using = ".//*[@id='select2-drop']/ul/li[3]/div")
-	private WebElement PropertyTypes_dd;
+	@FindBy(how = How.XPATH, using = "//li[contains(@class,'select2-re')]")
+	private List<WebElement> PropertyTypes_dd;
 	@FindBy(how = How.XPATH, using = "//input[@id='s2id_autogen78']")
 	private WebElement BedroomPreferences;
 	@FindBy(how = How.XPATH, using = ".//*[@id='select2-drop']/ul/li[4]/div")
@@ -147,12 +147,11 @@ public class AddLeadFormPage extends ReusableUtils{
 
 	public void selectTeam(String teamname) throws InterruptedException {
 
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("arguments[0].scrollIntoView(false);", ScheduleAndConductSiteVisitForProjectField);
+		scrollIntoView( driver.findElement(By.xpath("//label[contains(text(),'Tags')]")));
 
 		TeamsField.click();
 		SelectTeamInputField.sendKeys(teamname);
-		Thread.sleep(2000);
+		waitUntilVisiblity(TeamFrom_dd);
 		TeamFrom_dd.click();
 	}
 
@@ -160,21 +159,21 @@ public class AddLeadFormPage extends ReusableUtils{
 		AssignToField.click();
 		AssignToInputField.sendKeys(assign);
 		Thread.sleep(2000);
+		waitUntilVisiblity(AssignTo_dd);
 		AssignTo_dd.click();
 	}
 
 	public void selectProject(String projectname) throws InterruptedException {
-		ScheduleAndConductSiteVisitForProjectField.sendKeys(projectname);
-		Thread.sleep(2000);
-		Project_dd.get(0).click();
+		scrollIntoView(driver.findElement(By.xpath("//span[contains(text(),'Select Country Name')]")));
+		driver.findElement(By.cssSelector("#s2id_autogen65 input")).click();
+		driver.findElement(By.cssSelector("#s2id_autogen66")).sendKeys(projectname);
+		driver.findElement(By.cssSelector(".select2-result-label")).click();
 	}
 
-	public void selectProject() {
+	public void conductedSiteVisit(String value) {
 
-		// This will scroll into view
-//		JavascriptExecutor js = (JavascriptExecutor) driver;
-//		js.executeScript("arguments[0].scrollIntoView(true);", ScheduleAndConductSiteVisitForProjectField);
-		scrollIntoView(ScheduleAndConductSiteVisitForProjectField);
+
+		//scrollAction(SourceDropdown,ScheduleAndConductSiteVisitForProjectField);
 		
 		ScheduleAndConductSiteVisitForProjectField.click();
 
@@ -183,22 +182,8 @@ public class AddLeadFormPage extends ReusableUtils{
 		for (WebElement ele : list)
 
 		{
-			// for every elements it will print the name using innerHTML
-
-		//	System.out.println("Values " + ele.getAttribute("innerHTML"));
-
-			// Here we will verify if link (item) is equal Srujan
-
-			if (ele.getAttribute("innerHTML").contains("Srujan")) {
-
-				// if yes then click on link
-
+			if (ele.getText().trim().equalsIgnoreCase(value)) {
 				ele.click();
-
-			//	System.out.println("Clicked on Srujan");
-
-				// break the loop or come out of loop
-
 				break;
 			}
 		}
@@ -218,73 +203,41 @@ public class AddLeadFormPage extends ReusableUtils{
 			System.out.println("Values " + ele.getAttribute("innerHTML"));
 
 			if (ele.getAttribute("innerHTML").contains("CUSTOM 1")) {
-
 				ele.click();
-				System.out.println("Clicked on CUSTOM 1");
-
 				break;
 			}
 		}
 
 	}
 
-	public void selectCampaign() {
+	public void selectCampaign(String value) {
 
 		CampaignDropdown.click();
-
+		//waitUntilVisibilityOfElements(Campaign_dd);
 		List<WebElement> list = Campaign_dd;
 
 		for (WebElement ele : list)
-
 		{
-			// for every elements it will print the name using innerHTML
-
-			//System.out.println("Values " + ele.getAttribute("innerHTML"));
-
-			// Here we will verify if link (item) is equal Srujan
-
-			if (ele.getAttribute("innerHTML").contains("Final Destination 2")) {
-
-				// if yes then click on link
-
+			if (ele.getText().trim().equalsIgnoreCase(value)) {
 				ele.click();
-
-				// break the loop or come out of loop
-
 				break;
 			}
 		}
-
 	}
 
 	public void selectLeadStage(String value) {
 
-//		JavascriptExecutor js = (JavascriptExecutor) driver;
-//		js.executeScript("arguments[0].scrollIntoView(false);", ScheduleAndConductSiteVisitForProjectField);
-//	//	scrollIntoView(ScheduleAndConductSiteVisitForProjectField);
-		scrollIntoView(driver.findElement(By.xpath("//label[text()='Interested projects']")));
-		wait(1000);
-		LeadStageField.click();
 
+		scrollIntoView(driver.findElement(By.xpath("//label[text()='Interested projects']")));
+		LeadStageField.click();
+		waitUntilVisibilityOfElements(LeadStages_dd);
 		List<WebElement> list = LeadStages_dd;
 
 		for (WebElement ele : list)
 
 		{
-			// for every elements it will print the name using innerHTML
-
-			//System.out.println("Values " + ele.getAttribute("innerHTML"));
-
-			// Here we will verify if link (item) is equal Srujan
-
-			if (ele.getAttribute("innerHTML").contains(value)) {
-
-				// if yes then click on link
-
+			if (ele.getText().trim().equalsIgnoreCase(value)) {
 				ele.click();
-
-				// break the loop or come out of loop
-
 				break;
 			}
 		}
@@ -295,9 +248,13 @@ public class AddLeadFormPage extends ReusableUtils{
 
 		SourceDropdown.click();
 		SourceFrom_dd.click();
+		robotScroll(SourceDropdown,20000);
+		scrollAction(SourceDropdown,ScheduleAndConductSiteVisitForProjectField);
+		
 	}
 
 	public void inputAddress(String address) {
+		scrollIntoView(CityField);
 		AddressField.sendKeys(address);
 	}
 
@@ -326,8 +283,7 @@ public class AddLeadFormPage extends ReusableUtils{
 	public void inputBudget(String min, String max) throws InterruptedException {
 
 		// This will scroll up the web page
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("arguments[0].scrollIntoView(false);", FistNameField);
+		scrollIntoViewUp(driver.findElement(By.xpath("//a[contains(text(),'Requirement')]")));
 		scrollBy(-20000);
 		RequirementTab.click();
 		MinBudgetInputField.sendKeys(min);
@@ -341,13 +297,18 @@ public class AddLeadFormPage extends ReusableUtils{
 		MaxPossession_dd.click();
 	}
 
-	public void selectPropertyTypes() {
+	public void selectPropertyTypes(String type) {
 
 		// This will scroll down the web page
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("arguments[0].scrollIntoView(true);", driver.findElement(By.xpath("//*[@id='s2id_autogen79']/a/span[1]")));
+		js.executeScript("arguments[0].scrollIntoView(true);", driver.findElement(By.xpath("(//label[text()='Transaction Type'])[2]")));
 		PropertyTypes.click();
-		PropertyTypes_dd.click();
+		for (int i = 0; i < PropertyTypes_dd.size(); i++) {
+			if(PropertyTypes_dd.get(i).getText().equalsIgnoreCase(type)) {
+				PropertyTypes_dd.get(i).click();
+				break;
+			}
+		}
 	}
 
 	public void selectBedroomPreferences() {
@@ -360,6 +321,7 @@ public class AddLeadFormPage extends ReusableUtils{
 	}
 
 	public void inputLocatioPreferences(String pref) {
+		scrollIntoView(LocationPreferencesInputField);
 		LocationPreferencesInputField.sendKeys(pref);
 		LocationPreferences_dd.click();
 	}

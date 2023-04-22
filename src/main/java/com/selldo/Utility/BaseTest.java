@@ -78,6 +78,7 @@ public class BaseTest {
 
 	@AfterMethod(alwaysRun = true)
 	public void terminate() throws InterruptedException {
+		Thread.sleep(10000);
 		driver.quit();
 	}
 
@@ -116,4 +117,8 @@ public class BaseTest {
 		}
 		return Return;
 	}
+	protected String R(char []arr) {
+		return RandomStringUtils.random(1, arr);
+	}
+	
 }

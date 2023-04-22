@@ -1,4 +1,4 @@
-package ClientCreation;
+package ClientCreationTest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

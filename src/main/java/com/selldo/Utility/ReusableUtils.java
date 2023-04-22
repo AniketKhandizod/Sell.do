@@ -1,5 +1,7 @@
 package com.selldo.Utility;
 
+import java.awt.AWTException;
+import java.awt.Robot;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -12,6 +14,7 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -41,22 +44,22 @@ public class ReusableUtils {
 
 // --------------------------Wait ------------------------
 	protected WebElement waitUntilVisiblity(WebElement we) {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
 		wait.until(ExpectedConditions.visibilityOf(we));
 		return we;
 	}
 	protected WebElement waitUntilInvisibility(WebElement we) {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		wait.until(ExpectedConditions.invisibilityOf(we));
 		return we;
 	}
 	protected List<WebElement> waitUntilVisibilityOfElements(List<WebElement> we) {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
 		wait.until(ExpectedConditions.visibilityOfAllElements(we));
 		return we;
 	}
 	protected void waitElementToBeClickable(WebElement we) {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
 		wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(we)));
 	}
 
@@ -116,6 +119,7 @@ public class ReusableUtils {
 		actions.build().perform();
 	}
 
+
 	protected void scrollAction(WebElement we, WebElement we2) {
 		Actions actions = new Actions(driver);
 		actions.moveToElement(we);
@@ -155,6 +159,11 @@ public class ReusableUtils {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].scrollIntoView(true);", we);
 	}
+	protected void scrollIntoViewUp(WebElement we) {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].scrollIntoView(false);", we);
+	}
+	
 
 	protected void scrollBy(int scroll) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -239,6 +248,19 @@ public class ReusableUtils {
 //--------------Other------------------------------------------------
 	protected void refresh() {
 		driver.navigate().refresh();
+	}
+	protected void robotScroll(WebElement element,int value) {
+		wait(999);
+		Robot rb = null;
+		try {
+			rb = new Robot();
+		} catch (AWTException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Point point = element.getLocation();
+		rb.mouseMove(500, 500);
+		rb.mouseWheel(value);
 	}
 
 }

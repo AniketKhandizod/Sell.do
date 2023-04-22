@@ -60,7 +60,15 @@ public class SideBar extends ReusableUtils {
 	private WebElement allLead;
 	@FindBy(how = How.ID, using = "//a[.='Contact New Leads']")
 	private WebElement contactNewLead;
-
+	
+	// ---------------------SearchBar------------------------ #select2-drop input
+	@FindBy(how = How.XPATH, using = "//span[contains(text(),'Search...')]")
+	private WebElement clicksearchBar;
+	@FindBy(how = How.CSS, using = "#select2-drop input")
+	private WebElement enterSearchBar;
+	@FindBy(how = How.XPATH, using = "//*[contains(text(),'Search f')]")
+	private WebElement clickOnSuggationSearchBar;
+	
 	public void leadManagement() {
 		(leadManagement).click();
 
@@ -191,6 +199,15 @@ public class SideBar extends ReusableUtils {
 	public void clickcontactNewLead() {
 		waitUntilVisiblity(contactNewLead);
 		contactNewLead.click();
+	}
+	
+	//
+	public void searchbar(String input) {
+		waitUntilVisiblity(clicksearchBar);
+		clicksearchBar.click();
+		enterSearchBar.sendKeys(input);
+		clickOnSuggationSearchBar.click();
+		
 	}
 
 }
